@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eventos.Models;
+using System;
 using System.Data;
 using System.Data.SQLite;
 namespace csharp_Sqlite
@@ -6,9 +7,10 @@ namespace csharp_Sqlite
     public class DalHelper
     {
         private static SQLiteConnection sqliteConnection;
+        private const string DatabasePath = @"c:\dados\Eventos.sqlite";
         public DalHelper()
         { }
-        private static SQLiteConnection DbConnection()
+        public static SQLiteConnection DbConnection()
         {
             sqliteConnection = new SQLiteConnection("Data Source=c:\\dados\\Eventos.sqlite; Version=3;");
             sqliteConnection.Open();
@@ -18,7 +20,12 @@ namespace csharp_Sqlite
         {
             try
             {
-                SQLiteConnection.CreateFile(@"c:\dados\Eventos.sqlite");
+                string directory = Path.GetDirectoryName(DatabasePath);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                SQLiteConnection.CreateFile(DatabasePath); 
             }
             catch
             {
@@ -29,9 +36,19 @@ namespace csharp_Sqlite
         {
             try
             {
+                //RemoverTabelaSQLite();
+
                 using (var cmd = DbConnection().CreateCommand())
                 {
-                    cmd.CommandText = "CREATE TABLE IF NOT EXISTS Evento(id int, Nome Varchar(50), email VarChar(80),ativo (bool), prazo_inscricao (Datetime),prazo_submissao (Datetime)";
+                    cmd.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS Evento(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nome VARCHAR(50),
+                    descricao VARCHAR(80),
+                    ativo BOOLEAN,
+                    prazo_inscricao DATETIME,
+                    prazo_submissao DATETIME
+                )";
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -41,6 +58,23 @@ namespace csharp_Sqlite
             }
         }
 
+        public static void RemoverTabelaSQLite()
+        {
+            try
+            {
+                using (var cmd = DbConnection().CreateCommand())
+                {
+                    cmd.CommandText = "DROP TABLE IF EXISTS Evento";
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not remove the table.", ex);
+            }
+        }
+
+
         public static DataTable GetClientes()
         {
             SQLiteDataAdapter da = null;
@@ -49,7 +83,7 @@ namespace csharp_Sqlite
             {
                 using (var cmd = DbConnection().CreateCommand())
                 {
-                    cmd.CommandText = "SELECT * FROM Clientes";
+                    cmd.CommandText = "SELECT * FROM Evento";
                     da = new SQLiteDataAdapter(cmd.CommandText, DbConnection());
                     da.Fill(dt);
                     return dt;
@@ -79,17 +113,20 @@ namespace csharp_Sqlite
                 throw ex;
             }
         }
-        public static void Add(Cliente cliente)
+        public static void Add(Evento evento)
         {
             try
             {
-                using (var cmd = DbConnection().CreateCommand())
+                using (var connection = DalHelper.DbConnection())
                 {
-                    cmd.CommandText = "INSERT INTO Clientes(id, Nome, email ) values (@id, @nome, @email)";
-                    cmd.Parameters.AddWithValue("@Id", cliente.Id);
-                    cmd.Parameters.AddWithValue("@Nome", cliente.Nome);
-                    cmd.Parameters.AddWithValue("@Email", cliente.Email);
-                    cmd.ExecuteNonQuery();
+                    string query = "INSERT INTO Evento (Nome, descricao, ativo, prazo_inscricao, prazo_submissao) VALUES (@Nome, @Descricao, @Ativo, @PrazoInscricao, @PrazoSubmissao)";
+                    var command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@Nome", evento.Nome);
+                    command.Parameters.AddWithValue("@Descricao", evento.Descricao);
+                    command.Parameters.AddWithValue("@Ativo", evento.Ativo);
+                    command.Parameters.AddWithValue("@PrazoInscricao", evento.PrazoInscricao);
+                    command.Parameters.AddWithValue("@PrazoSubmissao", evento.PrazoSubmissao);
+                    command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -97,41 +134,80 @@ namespace csharp_Sqlite
                 throw ex;
             }
         }
-        public static void Update(Cliente cliente)
+        public static void Update(Evento evento)
         {
             try
             {
-                using (var cmd = new SQLiteCommand(DbConnection()))
+                using (var connection = DbConnection())
                 {
-                    if (cliente.Id != null)
+                    string query = "UPDATE Evento SET Nome=@Nome, descricao=@Descricao, ativo=@Ativo, prazo_inscricao=@PrazoInscricao, prazo_submissao=@PrazoSubmissao WHERE id=@Id";
+                    var command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@Nome", evento.Nome);
+                    command.Parameters.AddWithValue("@Descricao", evento.Descricao);
+                    command.Parameters.AddWithValue("@Ativo", evento.Ativo);
+                    command.Parameters.AddWithValue("@PrazoInscricao", evento.PrazoInscricao);
+                    command.Parameters.AddWithValue("@PrazoSubmissao", evento.PrazoSubmissao);
+                    command.Parameters.AddWithValue("@Id", evento.Id);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not update the event.", ex);
+            }
+        }
+
+        public static void ReorganizarOrdensDeEventos()
+        {
+            try
+            {
+                using (var connection = DbConnection())
+                {
+                    // Criar uma tabela temporária para reorganizar os IDs
+                    var cmd = new SQLiteCommand(connection)
                     {
-                        cmd.CommandText = "UPDATE Clientes SET Nome=@Nome, Email=@Email WHERE Id=@Id";
-                        cmd.Parameters.AddWithValue("@Id", cliente.Id);
-                        cmd.Parameters.AddWithValue("@Nome", cliente.Nome);
-                        cmd.Parameters.AddWithValue("@Email", cliente.Email);
-                        cmd.ExecuteNonQuery();
-                    }
-                };
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static void Delete(int Id)
-        {
-            try
-            {
-                using (var cmd = new SQLiteCommand(DbConnection()))
-                {
-                    cmd.CommandText = "DELETE FROM Clientes Where Id=@Id";
-                    cmd.Parameters.AddWithValue("@Id", Id);
+                        CommandText = @"
+                            CREATE TABLE IF NOT EXISTS EventoTemp(
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                Nome VARCHAR(50),
+                                descricao VARCHAR(80),
+                                ativo BOOLEAN,
+                                prazo_inscricao DATETIME,
+                                prazo_submissao DATETIME
+                            );
+
+                            INSERT INTO EventoTemp (Nome, descricao, ativo, prazo_inscricao, prazo_submissao)
+                            SELECT Nome, descricao, ativo, prazo_inscricao, prazo_submissao FROM Evento;
+
+                            DROP TABLE Evento;
+
+                            ALTER TABLE EventoTemp RENAME TO Evento;"
+                    };
                     cmd.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Could not reorganize the events.", ex);
+            }
+        }
+
+        public static void Delete(int id)
+        {
+            try
+            {
+                using (var connection = DbConnection())
+                {
+                    string query = "DELETE FROM Evento WHERE id=@Id";
+                    var command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@Id", id);
+                    command.ExecuteNonQuery();
+                }
+                ReorganizarOrdensDeEventos();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Could not delete the event.", ex);
             }
         }
     }
