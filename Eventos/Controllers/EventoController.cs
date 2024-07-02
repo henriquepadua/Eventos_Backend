@@ -79,8 +79,15 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                DalHelper.Delete(id);
-                return Ok("Evento deletado com Sucesso");
+                //return Ok("Evento deletado com Sucesso");
+                if (DalHelper.Delete(id) == 1)
+                {
+                    return Ok("Participante deletado com sucesso");
+                }
+                else
+                {
+                    return StatusCode(500, "Participante não encontrado");
+                }
             }
             catch (Exception ex)
             {

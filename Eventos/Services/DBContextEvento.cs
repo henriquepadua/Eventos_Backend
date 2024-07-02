@@ -10,7 +10,8 @@ namespace csharp_Sqlite
         public const string DatabasePath = @"c:\dados\Eventos.sqlite";
         public DalHelper()
         { }
-        public static SQLiteConnection DbConnection()
+        public static SQLiteConnection DbConnection(
+            )
         {
             sqliteConnection = new SQLiteConnection("Data Source=c:\\dados\\Eventos.sqlite; Version=3;");
             sqliteConnection.Open();
@@ -190,18 +191,21 @@ namespace csharp_Sqlite
             }
         }
 
-        public static void Delete(int id)
+        public static int Delete(int id)
         {
             try
             {
+                int retornoQuery = 0;
                 using (var connection = DbConnection())
                 {
                     string query = "DELETE FROM Evento WHERE id=@Id";
                     var command = new SQLiteCommand(query, connection);
                     command.Parameters.AddWithValue("@Id", id);
-                    command.ExecuteNonQuery();
+                    retornoQuery = command.ExecuteNonQuery();
+
                 }
                 ReorganizarOrdensDeEventos();
+                return retornoQuery;
             }
             catch (Exception ex)
             {
