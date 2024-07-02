@@ -1,11 +1,7 @@
 ﻿using csharp_Sqlite;
 using Eventos.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.SQLite;
 using System.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Eventos.Controllers
 {
@@ -19,11 +15,13 @@ namespace Eventos.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            EnsureTableCreated();
-            DataTable clientes = DalHelper.GetClientes();
+            try
+            {
+            VerificaSeTabelaFoiCriada();
+            DataTable Evento = DalHelper.GetEventos();
             List<Evento> eventos = new List<Evento>();
 
-            foreach (DataRow row in clientes.Rows)
+            foreach (DataRow row in Evento.Rows)
             {
                 Evento evento = new Evento
                 {
@@ -38,22 +36,18 @@ namespace Eventos.Controllers
             }
 
             return Ok(eventos);
+            }catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
-
-        //[HttpGet]
-        //[HttpGet]
-        //public async Task<IEnumerable<Evento>> GetById(int id)
-        //{
-        //    var item = new List<Evento> { };
-        //    return await Task.Run(() => (item));
-        //}
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Evento evento) 
         {
             try
             {
-                EnsureTableCreated();
+                VerificaSeTabelaFoiCriada();
                 DalHelper.Add(evento);
                 return Ok(evento);
             }
@@ -69,7 +63,7 @@ namespace Eventos.Controllers
         {
             try
             {
-                EnsureTableCreated();
+                VerificaSeTabelaFoiCriada();
                 DalHelper.Update(evento);
                 return Ok(evento);
             }
@@ -84,7 +78,7 @@ namespace Eventos.Controllers
         {
             try
             {
-                EnsureTableCreated();
+                VerificaSeTabelaFoiCriada();
                 DalHelper.Delete(id);
                 return Ok("Evento deletado com Sucesso");
             }
@@ -94,7 +88,7 @@ namespace Eventos.Controllers
             }
         }
 
-        private void EnsureTableCreated()
+        private void VerificaSeTabelaFoiCriada()
         {
             if (!_TabelaCriada)
             {

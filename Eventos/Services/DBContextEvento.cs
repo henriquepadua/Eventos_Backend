@@ -7,7 +7,7 @@ namespace csharp_Sqlite
     public class DalHelper
     {
         private static SQLiteConnection sqliteConnection;
-        private const string DatabasePath = @"c:\dados\Eventos.sqlite";
+        public const string DatabasePath = @"c:\dados\Eventos.sqlite";
         public DalHelper()
         { }
         public static SQLiteConnection DbConnection()
@@ -36,8 +36,6 @@ namespace csharp_Sqlite
         {
             try
             {
-                //RemoverTabelaSQLite();
-
                 using (var cmd = DbConnection().CreateCommand())
                 {
                     cmd.CommandText = @"
@@ -70,12 +68,12 @@ namespace csharp_Sqlite
             }
             catch (Exception ex)
             {
-                throw new Exception("Could not remove the table.", ex);
+                throw new Exception("Não foi possivel remover a tabela", ex);
             }
         }
 
 
-        public static DataTable GetClientes()
+        public static DataTable GetEventos()
         {
             SQLiteDataAdapter da = null;
             DataTable dt = new DataTable();
@@ -153,7 +151,7 @@ namespace csharp_Sqlite
             }
             catch (Exception ex)
             {
-                throw new Exception("Could not update the event.", ex);
+                throw new Exception("Erro ao atualizar o evento", ex);
             }
         }
 
@@ -188,7 +186,7 @@ namespace csharp_Sqlite
             }
             catch (Exception ex)
             {
-                throw new Exception("Could not reorganize the events.", ex);
+                throw new Exception("Não foi possível reeorganizar os eventos", ex);
             }
         }
 
@@ -207,7 +205,7 @@ namespace csharp_Sqlite
             }
             catch (Exception ex)
             {
-                throw new Exception("Could not delete the event.", ex);
+                throw new Exception("Não foi possível deletar os eventos", ex);
             }
         }
     }
