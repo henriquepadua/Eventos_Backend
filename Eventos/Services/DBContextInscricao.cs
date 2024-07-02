@@ -58,7 +58,7 @@ namespace csharp_Sqlite
             }
         }
 
-        public static void InscreverParticipante(int eventoId, int participanteId)
+        public static int InscreverParticipante(int eventoId, int participanteId)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@EventoId", eventoId);
                     command.Parameters.AddWithValue("@ParticipanteId", participanteId);
                     command.Parameters.AddWithValue("@Data", DateTime.Now);
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)

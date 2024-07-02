@@ -82,7 +82,7 @@ namespace csharp_Sqlite
 
         // Métodos de gerenciamento de eventos (Get, Add, Update, Delete) permanecem os mesmos...
 
-        public static void AddParticipante(Participante participante)
+        public static int AddParticipante(Participante participante)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@Nome", participante.Nome);
                     command.Parameters.AddWithValue("@Email", participante.Email);
                     command.Parameters.AddWithValue("@Ativo", participante.Ativo);
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -102,7 +102,7 @@ namespace csharp_Sqlite
             }
         }
 
-        public static void UpdateParticipante(Participante participante)
+        public static int UpdateParticipante(Participante participante)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@Email", participante.Email);
                     command.Parameters.AddWithValue("@Ativo", participante.Ativo);
                     command.Parameters.AddWithValue("@Id", participante.Id);
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)

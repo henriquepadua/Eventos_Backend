@@ -12,7 +12,7 @@ namespace Eventos.Controllers
     {
         private static bool _TabelaCriada = false;
 
-        [HttpGet]
+        [HttpGet("ListarEventos")]
         public async Task<ActionResult> Get()
         {
             try
@@ -34,22 +34,26 @@ namespace Eventos.Controllers
                 };
                 eventos.Add(evento);
             }
-
-            return Ok(eventos);
+                if (eventos != null)
+                    return Ok(eventos);
+                else
+                    return StatusCode(400, "Nenhum Evento Cadastrado");
             }catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
 
-        [HttpPost]
+        [HttpPost("CriarEvento")]
         public async Task<ActionResult> Post([FromBody] Evento evento) 
         {
             try
             {
                 VerificaSeTabelaFoiCriada();
-                DalEvento.Add(evento);
-                return Ok(evento);
+                if(DalEvento.Adicionar(evento) ==1)
+                    return Ok(evento);
+                else
+                    return StatusCode(400, "Nenhum Evento Encontrado");
             }
             catch (Exception ex)
             {
@@ -58,14 +62,16 @@ namespace Eventos.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPut("AtualizarEvento")]
         public async Task<ActionResult> Update([FromBody] Evento evento)
         {
             try
             {
                 VerificaSeTabelaFoiCriada();
-                DalEvento.Update(evento);
-                return Ok(evento);
+                if (DalEvento.Adicionar(evento) == 1)
+                    return Ok(evento);
+                else
+                    return StatusCode(400, "Nenhum Evento Encontrado");
             }
             catch (Exception ex)
             {
@@ -73,14 +79,13 @@ namespace Eventos.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("RemoverEvento")]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
                 VerificaSeTabelaFoiCriada();
-                //return Ok("Evento deletado com Sucesso");
-                if (DalEvento.Delete(id) == 1)
+                if (DalEvento.Deletar(id) == 1)
                 {
                     return Ok("Participante deletado com sucesso");
                 }

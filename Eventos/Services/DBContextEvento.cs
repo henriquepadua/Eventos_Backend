@@ -10,8 +10,7 @@ namespace csharp_Sqlite
         public const string DatabasePath = @"c:\dados\Eventos.sqlite";
         public DalEvento()
         { }
-        public static SQLiteConnection DbConnection(
-            )
+        public static SQLiteConnection DbConnection()
         {
             sqliteConnection = new SQLiteConnection("Data Source=c:\\dados\\Eventos.sqlite; Version=3;");
             sqliteConnection.Open();
@@ -73,7 +72,6 @@ namespace csharp_Sqlite
             }
         }
 
-
         public static DataTable GetEventos()
         {
             SQLiteDataAdapter da = null;
@@ -93,26 +91,7 @@ namespace csharp_Sqlite
                 throw ex;
             }
         }
-        public static DataTable GetCliente(int id)
-        {
-            SQLiteDataAdapter da = null;
-            DataTable dt = new DataTable();
-            try
-            {
-                using (var cmd = DbConnection().CreateCommand())
-                {
-                    cmd.CommandText = "SELECT * FROM Clientes Where Id=" + id;
-                    da = new SQLiteDataAdapter(cmd.CommandText, DbConnection());
-                    da.Fill(dt);
-                    return dt;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static void Add(Evento evento)
+        public static int Adicionar(Evento evento)
         {
             try
             {
@@ -125,7 +104,7 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@Ativo", evento.Ativo);
                     command.Parameters.AddWithValue("@PrazoInscricao", evento.PrazoInscricao);
                     command.Parameters.AddWithValue("@PrazoSubmissao", evento.PrazoSubmissao);
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -133,7 +112,7 @@ namespace csharp_Sqlite
                 throw ex;
             }
         }
-        public static void Update(Evento evento)
+        public static int Atualizar(Evento evento)
         {
             try
             {
@@ -147,7 +126,7 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@PrazoInscricao", evento.PrazoInscricao);
                     command.Parameters.AddWithValue("@PrazoSubmissao", evento.PrazoSubmissao);
                     command.Parameters.AddWithValue("@Id", evento.Id);
-                    command.ExecuteNonQuery();
+                    return command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -191,7 +170,7 @@ namespace csharp_Sqlite
             }
         }
 
-        public static int Delete(int id)
+        public static int Deletar(int id)
         {
             try
             {

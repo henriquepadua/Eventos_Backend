@@ -32,7 +32,10 @@ namespace Eventos.Controllers
                     listaParticipantes.Add(participante);
                 }
 
-                return Ok(listaParticipantes);
+                if (listaParticipantes != null)
+                    return Ok(listaParticipantes);
+                else
+                    return StatusCode(400, "Nenhum Participante inscrito no evento");
             }
             catch (Exception ex)
             {
@@ -46,8 +49,11 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelasForamCriadas();
-                DalInscricao.InscreverParticipante(eventoId, participanteId);
-                return Ok("Participante inscrito com sucesso");
+                if(DalInscricao.InscreverParticipante(eventoId, participanteId) == 1)
+                    return Ok("Participante inscrito com sucesso");
+                else
+                    return StatusCode(400, "Este participante não realizou inscrição");
+
             }
             catch (Exception ex)
             {
@@ -61,8 +67,11 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelasForamCriadas();
-                DalInscricao.CancelarInscricao(participanteId, eventoId);
-                return Ok("Inscrição cancelada com sucesso");
+                if(DalInscricao.CancelarInscricao(participanteId, eventoId) == 1)
+                    return Ok("Inscrição cancelada com sucesso");
+                else
+                    return StatusCode(400,"Este participante não realizou inscrição");
+
             }
             catch (Exception ex)
             {

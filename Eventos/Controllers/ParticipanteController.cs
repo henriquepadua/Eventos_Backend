@@ -31,14 +31,9 @@ namespace Eventos.Controllers
                     participantes.Add(participante);
                 }
                 if (participantes != null)
-                {
                     return Ok(participantes);
-                }
                 else
-                {
                     return StatusCode(400, "Nenhum Participante Cadastrado");
-
-                }
             }
             catch (Exception ex)
             {
@@ -52,8 +47,10 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                DalParticipante.AddParticipante(participante);
-                return Ok(participante);
+                if(DalParticipante.AddParticipante(participante)== 1)
+                    return Ok(participante);
+                else
+                    return StatusCode(400, "Nenhum Participante Cadastrado");
             }
             catch (Exception ex)
             {
@@ -68,7 +65,10 @@ namespace Eventos.Controllers
             {
                 VerificaSeTabelaFoiCriada();
                 DalParticipante.UpdateParticipante(participante);
-                return Ok(participante);
+                if (DalParticipante.AddParticipante(participante) == 1)
+                    return Ok(participante);
+                else
+                    return StatusCode(400, "Participante não Encontrado"); 
             }
             catch (Exception ex)
             {
