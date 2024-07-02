@@ -88,7 +88,7 @@ namespace Eventos.Controllers
                 }
                 else
                 {
-                    return StatusCode(500,"Participante não encontrado");
+                    return StatusCode(400,"Participante não encontrado");
                 }
             }
             catch (Exception ex)

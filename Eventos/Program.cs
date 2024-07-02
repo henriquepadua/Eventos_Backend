@@ -9,12 +9,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Verifica e cria o banco de dados e tabelas antes de construir o aplicativo
-if (!File.Exists(DalHelper.DatabasePath))
+if (!File.Exists(DalEvento.DatabasePath))
 {
-    DalHelper.CriarBancoSQLite();
-    DalHelper.CriarTabelaSQlite();
+    DalEvento.CriarBancoSQLite();
+    DalEvento.CriarTabelaSQlite();
     DalParticipante.CriarTabelaSQlite();
-    DalParticipante.CriarBancoSQLite();
     Console.WriteLine("Banco de dados e tabelas criados com sucesso.");
 }
 else

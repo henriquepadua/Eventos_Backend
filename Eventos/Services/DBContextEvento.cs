@@ -4,11 +4,11 @@ using System.Data;
 using System.Data.SQLite;
 namespace csharp_Sqlite
 {
-    public class DalHelper
+    public class DalEvento
     {
         private static SQLiteConnection sqliteConnection;
         public const string DatabasePath = @"c:\dados\Eventos.sqlite";
-        public DalHelper()
+        public DalEvento()
         { }
         public static SQLiteConnection DbConnection(
             )
@@ -116,7 +116,7 @@ namespace csharp_Sqlite
         {
             try
             {
-                using (var connection = DalHelper.DbConnection())
+                using (var connection = DalEvento.DbConnection())
                 {
                     string query = "INSERT INTO Evento (Nome, descricao, ativo, prazo_inscricao, prazo_submissao) VALUES (@Nome, @Descricao, @Ativo, @PrazoInscricao, @PrazoSubmissao)";
                     var command = new SQLiteCommand(query, connection);
@@ -202,7 +202,6 @@ namespace csharp_Sqlite
                     var command = new SQLiteCommand(query, connection);
                     command.Parameters.AddWithValue("@Id", id);
                     retornoQuery = command.ExecuteNonQuery();
-
                 }
                 ReorganizarOrdensDeEventos();
                 return retornoQuery;

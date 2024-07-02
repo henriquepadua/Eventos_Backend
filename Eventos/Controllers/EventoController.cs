@@ -18,7 +18,7 @@ namespace Eventos.Controllers
             try
             {
             VerificaSeTabelaFoiCriada();
-            DataTable Evento = DalHelper.GetEventos();
+            DataTable Evento = DalEvento.GetEventos();
             List<Evento> eventos = new List<Evento>();
 
             foreach (DataRow row in Evento.Rows)
@@ -48,7 +48,7 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                DalHelper.Add(evento);
+                DalEvento.Add(evento);
                 return Ok(evento);
             }
             catch (Exception ex)
@@ -64,7 +64,7 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                DalHelper.Update(evento);
+                DalEvento.Update(evento);
                 return Ok(evento);
             }
             catch (Exception ex)
@@ -80,13 +80,13 @@ namespace Eventos.Controllers
             {
                 VerificaSeTabelaFoiCriada();
                 //return Ok("Evento deletado com Sucesso");
-                if (DalHelper.Delete(id) == 1)
+                if (DalEvento.Delete(id) == 1)
                 {
                     return Ok("Participante deletado com sucesso");
                 }
                 else
                 {
-                    return StatusCode(500, "Participante não encontrado");
+                    return StatusCode(400, "Participante não encontrado");
                 }
             }
             catch (Exception ex)
@@ -99,7 +99,7 @@ namespace Eventos.Controllers
         {
             if (!_TabelaCriada)
             {
-                DalHelper.CriarTabelaSQlite();
+                DalEvento.CriarTabelaSQlite();
                 _TabelaCriada = true;
             }
         }
