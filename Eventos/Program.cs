@@ -8,6 +8,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Configurar CORS para permitir todas as origens
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 // Verifica e cria o banco de dados e tabelas antes de construir o aplicativo
 if (!File.Exists(DalEvento.DatabasePath))
 {
@@ -18,7 +29,7 @@ if (!File.Exists(DalEvento.DatabasePath))
 }
 else
 {
-    Console.WriteLine("Banco de dados j� existe.");
+    Console.WriteLine("Banco de dados já existe.");
 }
 
 var app = builder.Build();
@@ -31,6 +42,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS com a política definida
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
 
