@@ -15,12 +15,12 @@ namespace Eventos.Controllers
         {
             try
             {
-                VerificaSeTabelaFoiCriada();
+                //VerificaSeTabelaFoiCriada();
                 DataTable ParticipanteTable = DalParticipante.GetParticipantes();
                 List<Participante> participantes = new List<Participante>();
 
                 foreach (DataRow row in ParticipanteTable.Rows)
-                {
+                {   
                     Participante participante = new Participante
                     {
                         Id = Convert.ToInt32(row["id"]),
@@ -47,7 +47,7 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                if(DalParticipante.AddParticipante(participante)== 1)
+                if(DalParticipante.AdicionarParticipante(participante)== 1)
                     return Ok(participante);
                 else
                     return StatusCode(400, "Nenhum Participante Cadastrado");
@@ -63,9 +63,7 @@ namespace Eventos.Controllers
         {
             try
             {
-                VerificaSeTabelaFoiCriada();
-                DalParticipante.UpdateParticipante(participante);
-                if (DalParticipante.AddParticipante(participante) == 1)
+                if (DalParticipante.AtualizaParticipante(participante) == 1)
                     return Ok(participante);
                 else
                     return StatusCode(400, "Participante não Encontrado"); 
@@ -81,7 +79,6 @@ namespace Eventos.Controllers
         {
             try
             {
-                VerificaSeTabelaFoiCriada();
                 if (DalParticipante.DeleteParticipante(id) == 1)
                 {
                     return Ok("Participante deletado com sucesso");

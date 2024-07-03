@@ -68,7 +68,7 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                if (DalEvento.Adicionar(evento) == 1)
+                if (DalEvento.Atualizar(evento) == 1)
                     return Ok(evento);
                 else
                     return StatusCode(400, "Nenhum Evento Encontrado");

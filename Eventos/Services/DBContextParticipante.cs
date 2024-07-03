@@ -82,7 +82,7 @@ namespace csharp_Sqlite
 
         // Métodos de gerenciamento de eventos (Get, Add, Update, Delete) permanecem os mesmos...
 
-        public static int AddParticipante(Participante participante)
+        public static int AdicionarParticipante(Participante participante)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace csharp_Sqlite
             }
         }
 
-        public static int UpdateParticipante(Participante participante)
+        public static int AtualizaParticipante(Participante participante)
         {
             try
             {
