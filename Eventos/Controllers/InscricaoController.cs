@@ -48,12 +48,15 @@ namespace Eventos.Controllers
         {
             try
             {
-                //VerificaSeTabelasForamCriadas();
-                if(DalInscricao.InscreverParticipante(inscricao.eventoId, inscricao.participanteId) == 1)
+                if (DalInscricao.VerificarInscricaoExistente(inscricao.eventoId, inscricao.participanteId))
+                {
+                    return StatusCode(404, "Inscrição já existe.");
+                }
+
+                if (DalInscricao.InscreverParticipante(inscricao.eventoId, inscricao.participanteId) == 1)
                     return Ok("Participante inscrito com sucesso");
                 else
                     return StatusCode(400, "Este participante não realizou inscrição");
-
             }
             catch (Exception ex)
             {
@@ -66,7 +69,6 @@ namespace Eventos.Controllers
         {
             try
             {
-                //VerificaSeTabelasForamCriadas();
                 if(DalInscricao.CancelarInscricao(participanteId, eventoId) == 1)
                     return Ok("Inscrição cancelada com sucesso");
                 else

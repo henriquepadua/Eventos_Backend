@@ -68,7 +68,7 @@ namespace csharp_Sqlite
                         CREATE TABLE IF NOT EXISTS Participante(
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             Nome VARCHAR(50),
-                            Email VARCHAR(80),
+                            Email VARCHAR(80) UNIQUE,
                             ativo BOOLEAN
                         )";
                     cmd.ExecuteNonQuery();
@@ -156,7 +156,7 @@ namespace csharp_Sqlite
                             CREATE TABLE IF NOT EXISTS ParticipanteTemp(
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 Nome VARCHAR(50),
-                                Email VARCHAR(80),
+                                Email VARCHAR(80) UNIQUE,
                                 ativo BOOLEAN
                             );
 

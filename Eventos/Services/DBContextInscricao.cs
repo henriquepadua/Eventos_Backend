@@ -58,6 +58,26 @@ namespace csharp_Sqlite
             }
         }
 
+        public static bool VerificarInscricaoExistente(int eventoId, int participanteId)
+        {
+            try
+            {
+                using (var connection = DbConnection())
+                {
+                    string query = "SELECT COUNT(1) FROM Inscricao WHERE evento_id = @EventoId AND participante_id = @ParticipanteId";
+                    var command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@EventoId", eventoId);
+                    command.Parameters.AddWithValue("@ParticipanteId", participanteId);
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível verificar a inscrição", ex);
+            }
+        }
+
         public static int InscreverParticipante(int eventoId, int participanteId)
         {
             try

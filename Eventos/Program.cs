@@ -25,6 +25,7 @@ if (!File.Exists(DalEvento.DatabasePath))
     DalEvento.CriarBancoSQLite();
     DalEvento.CriarTabelaSQlite();
     DalParticipante.CriarTabelaSQlite();
+    DalInscricao.CriarTabelaInscricaoSQlite();
     Console.WriteLine("Banco de dados e tabelas criados com sucesso.");
 }
 else
