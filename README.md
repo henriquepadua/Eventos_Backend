@@ -57,4 +57,5 @@ Gerencie seu banco de dados:
 Você pode criar tabelas, executar consultas SQL e gerenciar a estrutura do seu banco de dados usando as ferramentas fornecidas pelo SQLiteStudio.
 
 Em seguida um vídeo que criei para entrar no banco de dados
-Vídeo para entrar no banco de dados: **https://youtu.be/jfDJ0TR5mdM**
+Vai aparecer opção **"Arquivo:"** **"c:\dados\Eventos.sqlite"**: 
+Vai aparecer opção "**Nome(lista)"**: **"main"**
