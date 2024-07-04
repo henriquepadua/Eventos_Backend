@@ -82,6 +82,25 @@ namespace csharp_Sqlite
 
         // Métodos de gerenciamento de eventos (Get, Add, Update, Delete) permanecem os mesmos...
 
+        public static bool EmailExiste(string email)
+        {
+            try
+            {
+                using (var connection = DbConnection())
+                {
+                    string query = "SELECT COUNT(1) FROM Participante WHERE Email = @Email";
+                    var command = new SQLiteCommand(query, connection);
+                    command.Parameters.AddWithValue("@Email", email);
+                    int count = Convert.ToInt32(command.ExecuteScalar());
+                    return count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao verificar o email do participante.", ex);
+            }
+        }
+
         public static int AdicionarParticipante(Participante participante)
         {
             try

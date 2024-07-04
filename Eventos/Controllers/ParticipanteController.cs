@@ -47,7 +47,12 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                if(DalParticipante.AdicionarParticipante(participante) == 1)
+                if (DalParticipante.EmailExiste(participante.Email))
+                {
+                    return StatusCode(409, "Email já existe.");
+                }
+
+                if (DalParticipante.AdicionarParticipante(participante) == 1)
                     return Ok(participante);
                 else
                     return StatusCode(400, "Nenhum Participante Cadastrado");
