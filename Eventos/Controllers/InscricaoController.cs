@@ -15,7 +15,7 @@ namespace Eventos.Controllers
         public async Task<ActionResult> ListarParticipantesPorEvento(int eventoId)
         {
             try
-            {
+            {   
                 VerificaSeTabelasForamCriadas();
                 DataTable participantes = DalInscricao.GetParticipantesPorEvento(eventoId);
                 List<Participante> listaParticipantes = new List<Participante>();
@@ -44,12 +44,12 @@ namespace Eventos.Controllers
         }
 
         [HttpPost("Inscrever")]
-        public async Task<ActionResult> Inscrever(int eventoId, int participanteId)
+        public async Task<ActionResult> Inscrever([FromBody] InscricaoRequest inscricao)
         {
             try
             {
-                VerificaSeTabelasForamCriadas();
-                if(DalInscricao.InscreverParticipante(eventoId, participanteId) == 1)
+                //VerificaSeTabelasForamCriadas();
+                if(DalInscricao.InscreverParticipante(inscricao.eventoId, inscricao.participanteId) == 1)
                     return Ok("Participante inscrito com sucesso");
                 else
                     return StatusCode(400, "Este participante não realizou inscrição");
@@ -66,7 +66,7 @@ namespace Eventos.Controllers
         {
             try
             {
-                VerificaSeTabelasForamCriadas();
+                //VerificaSeTabelasForamCriadas();
                 if(DalInscricao.CancelarInscricao(participanteId, eventoId) == 1)
                     return Ok("Inscrição cancelada com sucesso");
                 else

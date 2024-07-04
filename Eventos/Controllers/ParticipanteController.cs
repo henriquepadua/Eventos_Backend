@@ -47,7 +47,7 @@ namespace Eventos.Controllers
             try
             {
                 VerificaSeTabelaFoiCriada();
-                if(DalParticipante.AdicionarParticipante(participante)== 1)
+                if(DalParticipante.AdicionarParticipante(participante) == 1)
                     return Ok(participante);
                 else
                     return StatusCode(400, "Nenhum Participante Cadastrado");
