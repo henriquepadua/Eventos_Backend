@@ -59,3 +59,78 @@ Você pode criar tabelas, executar consultas SQL e gerenciar a estrutura do seu 
 Em seguida um vídeo que criei para entrar no banco de dados
 Vai aparecer opção **"Arquivo:"** **"c:\dados\Eventos.sqlite"**: 
 Vai aparecer opção "**Nome(lista)"**: **"main"**
+
+
+Baixar e testar projeto com **Linux**:
+1 - Instalar Git:
+Se o Git não estiver instalado, você pode instalá-lo com o seguinte comando:
+**sudo apt-get update
+sudo apt-get install git**
+
+2 - Instalar .NET SDK:
+Siga as instruções no site oficial do .NET para instalar o .NET SDK no Linux: Instalação do .NET no Linux
+
+Para instalar o .NET SDK no Ubuntu, você pode usar os seguintes comandos:
+**wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update
+sudo apt-get install -y apt-transport-https
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-7.0**
+
+3- Instalar SQLite:
+Para instalar o SQLite no Ubuntu, você pode usar o seguinte comando:
+**sudo apt-get install sqlite3**
+
+4- Baixar o Projeto:
+Clone o repositório do GitHub para o seu sistema local:
+**git clone https://github.com/henriquepadua/Eventos_Backend.git
+cd Eventos_Backend**
+
+5 - Restaurar Dependências do Projeto:
+Dentro do diretório do projeto, execute o comando abaixo para restaurar todas as dependências necessárias:
+**dotnet restore**
+
+6 - Configurar o Banco de Dados:
+Crie e configure o banco de dados SQLite necessário para o projeto. O repositório deve conter arquivos de configuração ou scripts para isso. Se não houver um script específico, você pode criar o banco de dados manualmente e usar o SQLiteStudio para gerenciá-lo.
+
+Para criar e usar um banco de dados SQLite:
+**sqlite3 eventos.db**
+
+7 - Executar o Projeto:
+Execute o projeto usando o comando:
+**dotnet run**
+
+Passos Detalhados para Instalar o .NET SDK
+1 - Adicionar o Repositório do Microsoft Package:
+**wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb**
+
+2 - Instalar o .NET SDK:
+**sudo apt-get update
+sudo apt-get install -y apt-transport-https
+sudo apt-get update
+sudo apt-get install -y dotnet-sdk-7.0**
+
+Passos Detalhados para Baixar e Executar o Projeto
+1 - Clonar o Repositório:
+**git clone https://github.com/henriquepadua/Eventos_Backend.git
+cd Eventos_Backend**
+
+2 - Restaurar Dependências:
+**dotnet restore**
+
+3 - Configurar o Banco de Dados:
+Crie o banco de dados SQLite:
+**sqlite3 eventos.db**
+
+4 - Executar o Projeto:
+**dotnet run**
+
+Dicas Adicionais
+Atualizar Dependências:
+Certifique-se de atualizar as dependências do projeto regularmente executando:
+**dotnet restore**
+
+Solucionar Problemas:
+Se encontrar problemas, use o comando **dotnet --info** para verificar a instalação do .NET SDK e solucionar problemas de configuração.
