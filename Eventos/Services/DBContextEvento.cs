@@ -135,41 +135,6 @@ namespace csharp_Sqlite
             }
         }
 
-        public static void ReorganizarOrdensDeEventos()
-        {
-            try
-            {
-                using (var connection = DbConnection())
-                {
-                    // Criar uma tabela temporária para reorganizar os IDs
-                    var cmd = new SQLiteCommand(connection)
-                    {
-                        CommandText = @"
-                            CREATE TABLE IF NOT EXISTS EventoTemp(
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                Nome VARCHAR(50),
-                                descricao VARCHAR(80),
-                                ativo BOOLEAN,
-                                prazo_inscricao DATETIME,
-                                prazo_submissao DATETIME
-                            );
-
-                            INSERT INTO EventoTemp (Nome, descricao, ativo, prazo_inscricao, prazo_submissao)
-                            SELECT Nome, descricao, ativo, prazo_inscricao, prazo_submissao FROM Evento;
-
-                            DROP TABLE Evento;
-
-                            ALTER TABLE EventoTemp RENAME TO Evento;"
-                    };
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Não foi possível reeorganizar os eventos", ex);
-            }
-        }
-
         public static int Deletar(int id)
         {
             try
@@ -182,7 +147,6 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@Id", id);
                     retornoQuery = command.ExecuteNonQuery();
                 }
-                //ReorganizarOrdensDeEventos();
                 return retornoQuery;
             }
             catch (Exception ex)

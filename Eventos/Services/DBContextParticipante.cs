@@ -154,44 +154,11 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@Id", id);
                     retornoQuery  = command.ExecuteNonQuery();
                 }
-                //ReorganizarOrdensDeParticipantes();
                 return retornoQuery;
             }
             catch (Exception ex)
             {
                 throw new Exception("Não foi possível deletar o participante.", ex);
-            }
-        }
-
-        public static void ReorganizarOrdensDeParticipantes()
-        {
-            try
-            {
-                using (var connection = DbConnection())
-                {
-                    var cmd = new SQLiteCommand(connection)
-                    {
-                        CommandText = @"
-                            CREATE TABLE IF NOT EXISTS ParticipanteTemp(
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                Nome VARCHAR(50),
-                                Email VARCHAR(80) UNIQUE,
-                                ativo BOOLEAN
-                            );
-
-                            INSERT INTO ParticipanteTemp (Nome, Email, ativo)
-                            SELECT Nome, Email, ativo FROM Participante;
-
-                            DROP TABLE Participante;
-
-                            ALTER TABLE ParticipanteTemp RENAME TO Participante;"
-                    };
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Não foi possível reorganizar os participantes.", ex);
             }
         }
 
