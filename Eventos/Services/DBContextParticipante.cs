@@ -154,7 +154,7 @@ namespace csharp_Sqlite
                     command.Parameters.AddWithValue("@Id", id);
                     retornoQuery  = command.ExecuteNonQuery();
                 }
-                ReorganizarOrdensDeParticipantes();
+                //ReorganizarOrdensDeParticipantes();
                 return retornoQuery;
             }
             catch (Exception ex)
